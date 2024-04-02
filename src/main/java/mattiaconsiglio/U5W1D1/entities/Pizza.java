@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 public class Pizza extends Food{
@@ -23,6 +25,6 @@ public class Pizza extends Food{
 
     @Override
     public String getName() {
-        return this.name + " (" + this.toppings.toString() + ")";
+        return this.name + " (" + this.toppings.stream().map(Topping::getName).collect(Collectors.joining(", ")) + ")";
     }
 }

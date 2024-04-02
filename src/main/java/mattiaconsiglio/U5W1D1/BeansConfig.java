@@ -4,8 +4,10 @@ import mattiaconsiglio.U5W1D1.entities.Drink;
 import mattiaconsiglio.U5W1D1.entities.Menu;
 import mattiaconsiglio.U5W1D1.entities.Pizza;
 import mattiaconsiglio.U5W1D1.entities.Topping;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,49 +16,44 @@ import java.util.List;
 public class BeansConfig {
     @Bean
     public Topping cheese() {
-        return new Topping("cheese", 92, 0.69);
+        return new Topping("Cheese", 92, 0.69);
     }
 
     @Bean
     public Topping ham() {
-        return new Topping("ham", 35, 0.99);
+        return new Topping("Ham", 35, 0.99);
     }
 
     @Bean
     public Topping onion() {
-        return new Topping("onion", 22, 0.69);
+        return new Topping("Onion", 22, 0.69);
     }
 
     @Bean
     public Topping pineapple() {
-        return new Topping("pineapple", 24, 0.79);
+        return new Topping("Pineapple", 24, 0.79);
     }
 
     @Bean
     public Topping salami() {
-        return new Topping("salami", 25, 1.09);
+        return new Topping("Salami", 25, 1.09);
     }
+
 
     @Bean
+    @Primary
     public List<Topping> getToppings() {
-        List<Topping> toppings = new ArrayList<>();
-        toppings.add(cheese());
-        toppings.add(ham());
-        toppings.add(onion());
-        toppings.add(pineapple());
-        toppings.add(salami());
-
-        return toppings;
+        return new ArrayList<>(List.of(cheese(), ham(), onion(), pineapple(), salami()));
     }
-
 
     @Bean
     public List<Pizza> getPizzas() {
-    List<Pizza> pizzas = new ArrayList<>();
-    pizzas.add(new Pizza("Margherita", 100, 10.0));
-    pizzas.add(new Pizza("Hawaiian Pizza", 150, 15.0));
+        List<Pizza> pizzas = new ArrayList<>();
+        pizzas.add(new Pizza("Margherita", 1104, 10.0));
+        pizzas.add(new Pizza("Hawaiian Pizza", 1024, 15.0, List.of(cheese(), ham(), pineapple())));
+        pizzas.add(new Pizza("Salami Pizza", 1160, 12.0, List.of(cheese(), onion(), salami())));
 
-    return pizzas;
+        return pizzas;
     }
 
 
@@ -71,7 +68,7 @@ public class BeansConfig {
 
 
     @Bean
-    public Menu menu(List<Pizza> pizzas, List<Topping> toppings, List<Drink> drinks) {
+    public Menu menu(List<Pizza> pizzas, @Qualifier("getToppings") List<Topping> toppings, List<Drink> drinks) {
         return new Menu(pizzas, toppings, drinks);
     }
 }
