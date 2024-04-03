@@ -12,20 +12,29 @@ import java.util.stream.Collectors;
 public class Pizza extends Food {
     private List<Topping> toppings = new ArrayList<>();
 
-
     public Pizza(String name, List<Topping> basicToppings) {
+        this(name, basicToppings, true);
+    }
+
+    public Pizza(String name, List<Topping> basicToppings, List<Topping> toppings) {
+        this(name, basicToppings, false);
+        this.toppings.addAll(toppings);
+        this.calories += toppings.stream().mapToInt(Topping::getCalories).sum();
+        this.price += toppings.stream().mapToDouble(Topping::getPrice).sum();
+        roundPrice();
+    }
+
+    private Pizza(String name, List<Topping> basicToppings, boolean isCalledFromThreeParamConstructor) {
         super(name);
         this.toppings.addAll(basicToppings);
         this.calories = 100 + basicToppings.stream().mapToInt(Topping::getCalories).sum();
         this.price = 10 + basicToppings.stream().mapToDouble(Topping::getPrice).sum();
-        this.price = Math.round(this.price * 100.0) / 100.0;
+        if (!isCalledFromThreeParamConstructor) {
+            roundPrice();
+        }
     }
 
-    public Pizza(String name, List<Topping> basicToppings, List<Topping> toppings) {
-        this(name, basicToppings);
-        this.toppings.addAll(toppings);
-        this.calories += toppings.stream().mapToInt(Topping::getCalories).sum();
-        this.price += toppings.stream().mapToDouble(Topping::getPrice).sum();
+    private void roundPrice() {
         this.price = Math.round(this.price * 100.0) / 100.0;
     }
 
