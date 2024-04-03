@@ -1,20 +1,25 @@
 package mattiaconsiglio.U5W1D1;
 
-import mattiaconsiglio.U5W1D1.entities.Drink;
-import mattiaconsiglio.U5W1D1.entities.Menu;
-import mattiaconsiglio.U5W1D1.entities.Pizza;
-import mattiaconsiglio.U5W1D1.entities.Topping;
+import mattiaconsiglio.U5W1D1.entities.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Configuration
+@PropertySource("application.properties")
 public class BeansConfig {
+    @Bean(name = "getSeatConst")
+    public double getSeatConst(@Value("${seat.cost}") int seatCost) {
+        return seatCost;
+    }
+
     @Bean
     public Topping cheese() {
         return new Topping("Cheese", 92, 0.69);
@@ -40,6 +45,7 @@ public class BeansConfig {
         return new Topping("Salami", 25, 1.09);
     }
 
+    @Bean
     public Topping tomato() {
         return new Topping("Tomato", 20, 0.49);
     }
@@ -78,4 +84,20 @@ public class BeansConfig {
     public Menu menu(List<Pizza> pizzas, @Qualifier("getToppings") List<Topping> toppings, List<Drink> drinks) {
         return new Menu(pizzas, toppings, drinks);
     }
+
+
+    @Bean
+    public List<Table> getTables() {
+        List<Table> tables = new ArrayList<>();
+        tables.add(new Table(1, TableStatus.FREE, 2));
+        tables.add(new Table(2, TableStatus.FREE, 4));
+        tables.add(new Table(3, TableStatus.FREE, 6));
+        tables.add(new Table(4, TableStatus.FREE, 2));
+        tables.add(new Table(5, TableStatus.FREE, 2));
+        tables.add(new Table(6, TableStatus.FREE, 2));
+        tables.add(new Table(7, TableStatus.FREE, 2));
+        return tables;
+    }
+
+
 }

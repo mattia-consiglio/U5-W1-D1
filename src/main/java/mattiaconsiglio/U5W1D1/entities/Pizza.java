@@ -16,13 +16,19 @@ public class Pizza extends Food {
     public Pizza(String name, List<Topping> basicToppings) {
         super(name);
         this.toppings.addAll(basicToppings);
+        this.calories = 100 + basicToppings.stream().mapToInt(Topping::getCalories).sum();
+        this.price = 10 + basicToppings.stream().mapToDouble(Topping::getPrice).sum();
+        this.price = Math.round(this.price * 100.0) / 100.0;
     }
 
     public Pizza(String name, List<Topping> basicToppings, List<Topping> toppings) {
         this(name, basicToppings);
-        this.toppings.addAll(basicToppings);
         this.toppings.addAll(toppings);
+        this.calories += toppings.stream().mapToInt(Topping::getCalories).sum();
+        this.price += toppings.stream().mapToDouble(Topping::getPrice).sum();
+        this.price = Math.round(this.price * 100.0) / 100.0;
     }
+
 
     @Override
     public String getName() {

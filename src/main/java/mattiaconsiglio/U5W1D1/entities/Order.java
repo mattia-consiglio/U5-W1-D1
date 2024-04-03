@@ -1,17 +1,15 @@
 package mattiaconsiglio.U5W1D1.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
-@Component
 public class Order {
     private int orderNumber;
     private OrderStatus status;
@@ -19,6 +17,39 @@ public class Order {
     private int seatsNumber;
     private LocalTime time;
     private List<Table> tables;
-    private int totalPrice;
+    private double totalPrice;
+    private double seatCost;
 
+    public Order(int orderNumber, OrderStatus status, List<Food> foods, int seatsNumber, LocalTime time, List<Table> tables, double seatCost) {
+        this.orderNumber = orderNumber;
+        this.status = status;
+        this.foods = foods;
+        this.seatsNumber = seatsNumber;
+        this.time = time;
+        this.tables = tables;
+        this.seatCost = seatCost;
+        this.totalPrice = this.calculateTotalPrice();
+    }
+
+    public double calculateTotalPrice() {
+        double total = seatCost * seatsNumber;
+        for (Food food : foods) {
+            total += food.getPrice();
+        }
+        total = Math.round(total * 100.0) / 100.0;
+        return total;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderNumber=" + orderNumber +
+                ", status=" + status +
+                ", foods=" + foods +
+                ", seatsNumber=" + seatsNumber +
+                ", time=" + time +
+                ", tables=" + tables +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
