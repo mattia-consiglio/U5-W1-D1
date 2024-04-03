@@ -9,17 +9,18 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class Pizza extends Food{
+public class Pizza extends Food {
     private List<Topping> toppings = new ArrayList<>();
 
 
-    public Pizza(String name, int calories, double price) {
-        super(name, calories, price);
-        this.toppings.add(new Topping("tomato"));
-        this.toppings.add(new Topping("cheese"));
+    public Pizza(String name, List<Topping> basicToppings) {
+        super(name);
+        this.toppings.addAll(basicToppings);
     }
-    public Pizza(String name, int calories, double price, List<Topping> toppings) {
-        this(name, calories, price);
+
+    public Pizza(String name, List<Topping> basicToppings, List<Topping> toppings) {
+        this(name, basicToppings);
+        this.toppings.addAll(basicToppings);
         this.toppings.addAll(toppings);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Configuration
 public class BeansConfig {
@@ -39,6 +40,10 @@ public class BeansConfig {
         return new Topping("Salami", 25, 1.09);
     }
 
+    public Topping tomato() {
+        return new Topping("Tomato", 20, 0.49);
+    }
+
 
     @Bean
     @Primary
@@ -46,12 +51,14 @@ public class BeansConfig {
         return new ArrayList<>(List.of(cheese(), ham(), onion(), pineapple(), salami()));
     }
 
+
     @Bean
     public List<Pizza> getPizzas() {
         List<Pizza> pizzas = new ArrayList<>();
-        pizzas.add(new Pizza("Margherita", 1104, 10.0));
-        pizzas.add(new Pizza("Hawaiian Pizza", 1024, 15.0, List.of(cheese(), ham(), pineapple())));
-        pizzas.add(new Pizza("Salami Pizza", 1160, 12.0, List.of(cheese(), onion(), salami())));
+        List<Topping> basicToppings = List.of(tomato(), cheese());
+        pizzas.add(new Pizza("Margherita", basicToppings));
+        pizzas.add(new Pizza("Hawaiian Pizza", basicToppings, List.of(ham(), pineapple())));
+        pizzas.add(new Pizza("Salami Pizza", basicToppings, List.of(onion(), salami())));
 
         return pizzas;
     }

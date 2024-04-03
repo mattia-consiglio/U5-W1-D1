@@ -16,5 +16,8 @@ public abstract class Food {
         this.name = name;
     }
 
-
+    public Food(String name, int calories) {
+        this.name = name;
+        this.calories = calories;
+    }
 }
